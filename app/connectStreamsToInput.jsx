@@ -5,30 +5,28 @@ export default function connectStreamsToInput(Component, streams) {
   return class extends React.Component {
     componentWillMount() {
       this.streamProps = {};
+      this.eventBuses = {};
 
       Object.keys(streams).forEach((streamName) => {
-        this.props.inputs.plug(streams[streamName](this.eventStream(streamName)))
+        const streamTransform = streams[streamName]
+        this.connectToInput(streamTransform(this.eventStream(streamName)))
       })
     }
 
     componentWillUnmount() {
-      var bacon = this._bacon;
-      if (bacon) {
-        var eventBuses = bacon['buses.events'];
-        if (eventBuses) {
-          for (var eventName in eventBuses) {
-            eventBuses[eventName].end();
-          }
-        }
+      for (let eventName in this.eventBuses) {
+        this.eventBuses[eventName].end();
       }
     }
 
+    connectToInput(stream) {
+      return this.props.inputs.plug(stream);
+    }
+
     eventStream(eventName) {
-      var bacon = this._bacon = this._bacon || {};
-      var buses = bacon['buses.events'] = bacon['buses.events'] || {};
-      var bus = buses[eventName];
+      let bus = this.eventBuses[eventName];
       if (!bus) {
-        bus = buses[eventName] = new Bacon.Bus();
+        bus = this.eventBuses[eventName] = new Bacon.Bus();
         this.streamProps[eventName] = function sendEventToStream(event) {
           bus.push(event);
         };
