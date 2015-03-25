@@ -17,7 +17,8 @@ var config = {
     root: __dirname,
     alias: {
       app: __dirname + '/app',
-      waveform: __dirname + '/vendor/js/waveform.js'
+      waveform: __dirname + '/vendor/js/waveform.js',
+      soundmanager: __dirname + '/vendor/js/soundmanager2.js'
     },
     extensions: ['', '.js', '.jsx']
   },

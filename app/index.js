@@ -2,6 +2,7 @@ import React from 'react'
 import Bacon from 'baconjs'
 import Immutable from 'immutable'
 import App from './app'
+import './soundmanager2_setup'
 import initialState from './initialState'
 
 function update(state, action) {
