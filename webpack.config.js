@@ -17,6 +17,7 @@ var config = {
     root: __dirname,
     alias: {
       app: __dirname + '/app',
+      waveform: __dirname + '/vendor/js/waveform.js'
     },
     extensions: ['', '.js', '.jsx']
   },
@@ -25,7 +26,7 @@ var config = {
   ],
   module: {
     loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: ['react-hot', 'babel?experimental'] }
+      { test: /\.jsx?$/, exclude: [/node_modules/, /vendor/], loaders: ['react-hot', 'babel?experimental'] }
     ]
   }
 };

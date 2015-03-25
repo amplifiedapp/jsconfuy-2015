@@ -18,7 +18,7 @@ export default class SongPlayer extends React.Component {
         Stop
       </a>
       <div className="waveform-container">
-        <SongWaveform />
+        <SongWaveform waveformData={this.props.song.get('waveformData')}/>
         <SongWaveformComments />
       </div>
     </div>

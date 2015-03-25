@@ -2,6 +2,7 @@ import React from 'react'
 import Bacon from 'baconjs'
 import Immutable from 'immutable'
 import App from './app'
+import initialState from './initialState'
 
 function update(state, action) {
   console.log(`updating ${action}`);
@@ -16,15 +17,12 @@ function update(state, action) {
 }
 
 function view(state, inputs) {
-  console.log(`rendering ${state.toString()}`);
+  console.log(`rendering ${state.toJS().toString()}`);
   return <App state={state} inputs={inputs}/>
 }
 
 function bootstrapApp(mountPoint) {
   const inputs = new Bacon.Bus();
-  const initialState = Immutable.Map({
-    counter: 0
-  });
 
   inputs
     .scan(initialState, update)
