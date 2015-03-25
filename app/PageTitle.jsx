@@ -9,7 +9,7 @@ export default class PageTitle extends React.Component {
       {this.props.sideOptions && <div className="pageTitle__sideOptions">
         {this.props.sideOptions}
       </div>}
-    </div>
+    </div>;
   }
 }
 

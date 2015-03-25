@@ -29,7 +29,7 @@ function bootstrapApp(mountPoint) {
     .scan(initialState, update)
     .map((state) => view(state, inputs))
     .onValue((element) => {
-      React.render(element, document.getElementById('app'));
+      React.render(element, mountPoint);
     });
 }
 

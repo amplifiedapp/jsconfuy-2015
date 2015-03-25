@@ -15,10 +15,8 @@ export default class SongWaveform extends React.Component {
           switch (false) {
             case !((percentageX * 100) <= this.props.playedPercentage):
               return '#fe5000';
-              break;
             case !((percentageX * 100) <= this.props.loadedPercentage):
               return '#0a0a0a';
-              break;
             default:
               return '#a0a0a0';
           }
