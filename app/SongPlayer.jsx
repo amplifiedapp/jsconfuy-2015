@@ -60,7 +60,7 @@ export default class SongPlayer extends React.Component {
     }
 
     if (this.state.playerStatus === PAUSED) {
-      playerControls.push(<a href='#' onClick={this.handleResumeClick.bind(this)}>Resume</a>)
+      playerControls.push(<a href='#' onClick={this.handleResumeClick.bind(this)}>Resume</a>);
     }
 
     return <div>
@@ -69,6 +69,6 @@ export default class SongPlayer extends React.Component {
         <SongWaveform waveformData={this.props.song.get('waveformData')}/>
         <SongWaveformComments />
       </div>
-    </div>
+    </div>;
   }
 }

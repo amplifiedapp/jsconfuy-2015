@@ -10,7 +10,7 @@ export default class SongWaveform extends React.Component {
         container: container,
         width: container.getBoundingClientRect().width,
         height: 140,
-        data: data.map((d) => { return d / 140 }).toArray(),
+        data: data.map((d) => d / 140).toArray(),
         innerColor: (percentageX) => {
           switch (false) {
             case !((percentageX * 100) <= this.props.playedPercentage):
@@ -21,7 +21,7 @@ export default class SongWaveform extends React.Component {
               return '#a0a0a0';
           }
         }
-      })
+      });
     }, 0);
   }
 
@@ -30,7 +30,7 @@ export default class SongWaveform extends React.Component {
   }
 
   render() {
-    return <div className='waveform'></div>
+    return <div className='waveform'></div>;
   }
 }
 

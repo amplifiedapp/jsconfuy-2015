@@ -19,7 +19,7 @@ function update(state, action) {
 
 function view(state, inputs) {
   console.log(`rendering ${state.toJS().toString()}`);
-  return <App state={state} inputs={inputs}/>
+  return <App state={state} inputs={inputs}/>;
 }
 
 function bootstrapApp(mountPoint) {

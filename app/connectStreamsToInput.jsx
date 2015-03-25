@@ -8,9 +8,9 @@ export default function connectStreamsToInput(Component, streams) {
       this.eventBuses = {};
 
       Object.keys(streams).forEach((streamName) => {
-        const streamTransform = streams[streamName]
-        this.connectToInput(streamTransform(this.eventStream(streamName)))
-      })
+        const streamTransform = streams[streamName];
+        this.connectToInput(streamTransform(this.eventStream(streamName)));
+      });
     }
 
     componentWillUnmount() {
@@ -35,7 +35,7 @@ export default function connectStreamsToInput(Component, streams) {
     }
 
     render() {
-      return <Component {...this.props} {...this.streamProps} />
+      return <Component {...this.props} {...this.streamProps} />;
     }
-  }
+  };
 }

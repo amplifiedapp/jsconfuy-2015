@@ -4,6 +4,6 @@ import RehearsedSong from './RehearsedSong'
 
 export default class App extends React.Component {
   render() {
-    return <RehearsedSong rehearsedSong={this.props.state.get('currentRehearsedSong')}/>
+    return <RehearsedSong rehearsedSong={this.props.state.get('currentRehearsedSong')}/>;
   }
 }
