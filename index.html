@@ -1,9 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link href="/application.css" media="all" rel="stylesheet">
   <script src="/build/app.js"></script>
 </head>
 <body>
-  <div id="app"></div>
+  <div class="top l-container">
+    <div class="top__logo">
+      <a href="#" target="_self">Amplified</a>
+    </div>
+    <nav class="top__menu top__right">
+      <ul class="list list-horizontal">
+        <li>
+          <a class="top__profileButton" data-dropdown="profile-dropdown" href="#">
+            <img alt="Gravatar" height="35" src="https://secure.gravatar.com/avatar/03185c6f8bd42ae08614ef3baaabe730?default=retro&amp;size=35" width="35"></a>
+        </li>
+        <li class="js-top-bar-button">
+          <div>
+            <a href="#" class="top__actionButton js-create-rehearsal">Add a rehearsal</a>
+            <a href="#" class="top__actionButton js-create-band" style="display: none;">Add a band</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="l-content l-container">
+    <div id="app" class="l-main js-main-content"></div>
+    <nav class="l-sidebar">
+      <div class="js-alerts">
+        <div>
+          <div class="alerts"></div>
+        </div>
+      </div>
+      <div class="js-sidebar">
+        <ul class="list sidenav">
+          <li>
+            <a class="sidenav__link" href="#">Bands</a>
+          </li>
+          <li>
+            <a class="sidenav__link" href="#">Beatles</a>
+          </li>
+          <li>
+            <a class="sidenav__link" href="#">Rehearsals</a>
+          </li>
+          <li>
+            <a class="sidenav__link" href="#">Rehearsal at 2015-03-10</a>
+          </li>
+          <li>
+            <a class="sidenav__link sidenav__selected" href="#">Vuelve a Casa</a>
+          </li>
+          <li>
+            <a class="sidenav__link" href="#">Yellow Submarine</a>
+          </li>
+          <li>
+            <a class="sidenav__link" href="#">Get Back</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
 </body>
 </html>
