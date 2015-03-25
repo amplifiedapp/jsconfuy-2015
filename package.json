@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --port 3000 --config webpack.config.js --hot --progress --inline --devtool eval-source-map",
-    "lint": "./node_modules/eslint/bin/eslint.js ./app/*"
+    "lint": "eslint ./app/*"
   },
   "repository": {
     "type": "git",
