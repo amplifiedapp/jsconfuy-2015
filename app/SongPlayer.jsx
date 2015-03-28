@@ -1,74 +1,64 @@
 import React from 'react'
+import connectStreamsToInput from './connectStreamsToInput'
+import Sound from './Sound'
 import SongWaveform from './SongWaveform'
 import SongWaveformComments from './SongWaveformComments'
 
-const PLAYING = '1';
-const PAUSED = '2';
-const STOPPED = '3';
-
-export default class SongPlayer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      playerStatus: STOPPED
-    };
-  }
-
-  componentWillMount() {
-    this.sound = soundManager.createSound({
-      url: this.props.song.get('audio')
-    });
-  }
-
-  handlePlayClick() {
-    this.sound.play();
-    this.setState({
-      playerStatus: PLAYING
-    });
-  }
-
-  handlePauseClick() {
-    this.sound.pause();
-    this.setState({
-      playerStatus: PAUSED
-    });
-  }
-
-  handleResumeClick() {
-    this.sound.resume();
-    this.setState({
-      playerStatus: PLAYING
-    });
-  }
-
-  handleStopClick() {
-    this.sound.stop();
-    this.setState({
-      playerStatus: STOPPED
-    });
-  }
-
+class SongPlayer extends React.Component {
   render() {
+    const song = this.props.song;
+    const playStatus = song.get('playStatus');
+
     let playerControls = [];
-    if (this.state.playerStatus === STOPPED) {
-      playerControls.push(<a href='#' onClick={this.handlePlayClick.bind(this)}>Play</a>);
+    if (playStatus === 'STOPPED') {
+      playerControls.push(<a key="play" href='#' onClick={this.props.plays}>Play</a>);
     }
 
-    if (this.state.playerStatus === PLAYING) {
-      playerControls.push(<a href='#' onClick={this.handlePauseClick.bind(this)}>Pause</a>);
-      playerControls.push(<a href='#' onClick={this.handleStopClick.bind(this)}>Stop</a>);
+    if (playStatus === 'PLAYING') {
+      playerControls.push(<a key="pause" href='#' onClick={this.props.pauses}>Pause</a>);
+      playerControls.push(<a key="stop" href='#' onClick={this.props.stops}>Stop</a>);
     }
 
-    if (this.state.playerStatus === PAUSED) {
-      playerControls.push(<a href='#' onClick={this.handleResumeClick.bind(this)}>Resume</a>);
+    if (playStatus === 'PAUSED') {
+      playerControls.push(<a key="resume" href='#' onClick={this.props.resumes}>Resume</a>);
     }
 
     return <div>
       {playerControls}
+      <Sound
+        url={song.get('audio')}
+        playStatus={playStatus}
+        positionInMs={song.get('playedPercentage') * song.get('durationInSecs') * 10 /* 1000 / 100 */}
+        onLoading={this.props.loadingEvents}
+        onPlaying={this.props.playingEvents}
+        onFinishPlaying={this.props.finishPlayingEvents} />
       <div className="waveform-container">
-        <SongWaveform waveformData={this.props.song.get('waveformData')}/>
+        <SongWaveform
+          waveformData={song.get('waveformData')}
+          playedPercentage={song.get('playedPercentage')}
+          loadedPercentage={song.get('loadedPercentage')}
+          onSongSeek={this.props.seeks} />
         <SongWaveformComments />
       </div>
     </div>;
   }
 }
+
+function mergeStreams(intents, plays, stops, pauses, resumes, seeks, loadingEvents,
+  playingEvents, finishPlayingEvents) {
+
+  return plays
+    .doAction('.preventDefault').flatMapLatest(intents.playSong)
+    .merge(stops.doAction('.preventDefault').flatMapLatest(intents.stopSong))
+    .merge(pauses.doAction('.preventDefault').flatMapLatest(intents.pauseSong))
+    .merge(resumes.doAction('.preventDefault').flatMapLatest(intents.resumeSong))
+    .merge(loadingEvents.map('.loadedPercentage').flatMapLatest(intents.updateSongLoading))
+    .merge(playingEvents.map((ev) => ev.positionInMs / 1000).flatMapLatest(intents.updateSongPlaying))
+    .merge(finishPlayingEvents.flatMapLatest(intents.finishSongPlaying))
+    .merge(seeks.flatMapLatest(intents.seekInSong));
+}
+
+export default connectStreamsToInput(SongPlayer,
+  ['plays', 'stops', 'pauses', 'resumes', 'seeks', 'loadingEvents', 'playingEvents', 'finishPlayingEvents'],
+  mergeStreams
+);

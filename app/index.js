@@ -4,22 +4,23 @@ import Immutable from 'immutable'
 import App from './app'
 import './soundmanager2_setup'
 import initialState from './initialState'
+import update from './update'
+import intents from './intents'
 
-function update(state, action) {
-  console.log(`updating ${action}`);
-  switch (action) {
-    case 'COUNT_UP':
-      return state.update('counter', (counter) => counter + 1);
-    case 'COUNT_DOWN':
-      return state.update('counter', (counter) => counter - 1);
-    default:
-      return state;
-  }
+function boundIntents(state) {
+  return Object.keys(intents).reduce(function(bound, intentName) {
+    bound[intentName] = intents[intentName].bind(null, state);
+    return bound;
+  }, {});
 }
 
 function view(state, inputs) {
-  console.log(`rendering ${state.toJS().toString()}`);
-  return <App state={state} inputs={inputs}/>;
+  console.log(state.toJS());
+  return <App
+    state={state}
+    inputs={inputs}
+    intents={boundIntents(state)}
+  />;
 }
 
 function bootstrapApp(mountPoint) {

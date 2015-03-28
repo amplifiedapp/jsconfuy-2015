@@ -30,7 +30,14 @@ export default class SongWaveform extends React.Component {
   }
 
   render() {
-    return <div className='waveform'></div>;
+    return <div className='waveform' onClick={this.handleWaveformClick.bind(this)}></div>;
+  }
+
+  handleWaveformClick(ev) {
+    const percentage = (ev.nativeEvent.offsetX / ev.target.offsetWidth) * 100;
+    if (this.props.onSongSeek) {
+      this.props.onSongSeek(percentage);
+    }
   }
 }
 
