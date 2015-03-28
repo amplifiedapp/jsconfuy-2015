@@ -3,28 +3,15 @@ import connectStreamsToInput from './connectStreamsToInput'
 import Sound from './Sound'
 import SongWaveform from './SongWaveform'
 import SongWaveformComments from './SongWaveformComments'
+import intents from './intents'
 
 class SongPlayer extends React.Component {
   render() {
     const song = this.props.song;
     const playStatus = song.get('playStatus');
 
-    let playerControls = [];
-    if (playStatus === 'STOPPED') {
-      playerControls.push(<a key="play" href='#' onClick={this.props.plays}>Play</a>);
-    }
-
-    if (playStatus === 'PLAYING') {
-      playerControls.push(<a key="pause" href='#' onClick={this.props.pauses}>Pause</a>);
-      playerControls.push(<a key="stop" href='#' onClick={this.props.stops}>Stop</a>);
-    }
-
-    if (playStatus === 'PAUSED') {
-      playerControls.push(<a key="resume" href='#' onClick={this.props.resumes}>Resume</a>);
-    }
-
     return <div>
-      {playerControls}
+      {this.renderPlayerControls()}
       <Sound
         url={song.get('audio')}
         playStatus={playStatus}
@@ -42,23 +29,41 @@ class SongPlayer extends React.Component {
       </div>
     </div>;
   }
+
+  renderPlayerControls() {
+    const playStatus = this.props.song.get('playStatus');
+    const playerControls = [];
+
+    if (playStatus === 'STOPPED') {
+      playerControls.push(<a key="play" href='#' onClick={this.props.plays}>Play</a>);
+    } else if (playStatus === 'PLAYING') {
+      playerControls.push(<a key="pause" href='#' onClick={this.props.pauses}>Pause</a>);
+      playerControls.push(<a key="stop" href='#' onClick={this.props.stops}>Stop</a>);
+    } else if (playStatus === 'PAUSED') {
+      playerControls.push(<a key="resume" href='#' onClick={this.props.resumes}>Resume</a>);
+      playerControls.push(<a key="stop" href='#' onClick={this.props.stops}>Stop</a>);
+    }
+
+    return playerControls;
+  }
 }
 
-function mergeStreams(intents, plays, stops, pauses, resumes, seeks, loadingEvents,
+function mergeStreams(plays, stops, pauses, resumes, seeks, loadingEvents,
   playingEvents, finishPlayingEvents) {
 
   return plays
-    .doAction('.preventDefault').flatMapLatest(intents.playSong)
-    .merge(stops.doAction('.preventDefault').flatMapLatest(intents.stopSong))
-    .merge(pauses.doAction('.preventDefault').flatMapLatest(intents.pauseSong))
-    .merge(resumes.doAction('.preventDefault').flatMapLatest(intents.resumeSong))
-    .merge(loadingEvents.map('.loadedPercentage').flatMapLatest(intents.updateSongLoading))
-    .merge(playingEvents.map((ev) => ev.positionInMs / 1000).flatMapLatest(intents.updateSongPlaying))
-    .merge(finishPlayingEvents.flatMapLatest(intents.finishSongPlaying))
-    .merge(seeks.flatMapLatest(intents.seekInSong));
+    .doAction('.preventDefault').map(intents.playSong)
+    .merge(stops.doAction('.preventDefault').map(intents.stopSong))
+    .merge(pauses.doAction('.preventDefault').map(intents.pauseSong))
+    .merge(resumes.doAction('.preventDefault').map(intents.resumeSong))
+    .merge(loadingEvents.map('.loadedPercentage').map(intents.updateSongLoading))
+    .merge(playingEvents.map((ev) => ev.positionInMs / 1000).map(intents.updateSongPlaying))
+    .merge(finishPlayingEvents.map(intents.finishSongPlaying))
+    .merge(seeks.map(intents.seekInSong));
 }
 
 export default connectStreamsToInput(SongPlayer,
-  ['plays', 'stops', 'pauses', 'resumes', 'seeks', 'loadingEvents', 'playingEvents', 'finishPlayingEvents'],
+  ['plays', 'stops', 'pauses', 'resumes', 'seeks', 'loadingEvents',
+   'playingEvents', 'finishPlayingEvents'],
   mergeStreams
 );

@@ -9,12 +9,12 @@ export default class App extends React.Component {
   getChildContext() {
     return {
       inputs: this.props.inputs,
-      intents: this.props.intents,
+      state: this.props.state
     }
   }
 }
 
 App.childContextTypes = {
   inputs: React.PropTypes.object,
-  intents: React.PropTypes.object,
-}
+  state: React.PropTypes.object
+};

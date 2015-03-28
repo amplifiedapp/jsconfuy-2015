@@ -13,7 +13,7 @@ export default function connectStreamsToInput(Component, sources, mergeFn) {
           bus.push(event);
         };
       });
-      this.connectToInput(mergeFn.apply(null, [this.context.intents].concat(this.buses)));
+      this.connectToInput(mergeFn.apply(null, this.buses));
     }
 
     componentWillUnmount() {
@@ -21,6 +21,18 @@ export default function connectStreamsToInput(Component, sources, mergeFn) {
     }
 
     connectToInput(stream) {
+      const state = this.context.state;
+
+      function processResult(streamResult) {
+        if (streamResult instanceof Bacon.Observable) {
+          return streamResult;
+        } else if (typeof streamResult == 'function') {
+          return processResult(streamResult(state));
+        } else {
+          return Bacon.once(streamResult);
+        }
+      }
+      stream = stream.flatMapLatest(processResult);
       return (this.props.inputs || this.context.inputs).plug(stream);
     }
 
@@ -30,7 +42,7 @@ export default function connectStreamsToInput(Component, sources, mergeFn) {
   }
   WithStreams.contextTypes = {
     inputs: React.PropTypes.object,
-    intents: React.PropTypes.object
+    state: React.PropTypes.object
   };
   return WithStreams;
 }
