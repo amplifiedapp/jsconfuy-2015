@@ -4,7 +4,8 @@
   "description": "Ejemplo de arquitectura FRP para la JSConfUY 2015",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --port 3000 --config webpack.config.js --hot --progress --inline --devtool eval-source-map"
+    "start": "webpack-dev-server --port 3000 --config webpack.config.js --hot --progress --inline --devtool eval-source-map",
+    "lint": "eslint ./app/*"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,9 @@
     "webpack-dev-server": "1.7.0",
     "babel-core": "4.7.16",
     "babel-loader": "4.2.0",
-    "react-hot-loader": "1.2.3"
+    "react-hot-loader": "1.2.3",
+    "eslint": "eslint/eslint",
+    "babel-eslint": "babel/babel-eslint"
   },
   "dependencies": {
     "immutable": "3.6.4",

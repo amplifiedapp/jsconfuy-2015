@@ -1,18 +1,20 @@
 import React from 'react'
-import connectStreamsToInput from './connectStreamsToInput'
+import RehearsedSong from './RehearsedSong'
 
-class App extends React.Component {
+export default class App extends React.Component {
   render() {
-    return <div>
-      <h1>Hola mundo!</h1>
-      <button onClick={this.props.countUps}>Count up</button>
-      {this.props.state.get('counter')}
-      <button onClick={this.props.countDowns}>Count down</button>
-    </div>
+    return <RehearsedSong rehearsedSong={this.props.state.get('currentRehearsedSong')}/>;
+  }
+
+  getChildContext() {
+    return {
+      inputs: this.props.inputs,
+      state: this.props.state
+    }
   }
 }
 
-export default connectStreamsToInput(App, {
-  countUps: (stream) => stream.map(() => 'COUNT_UP'),
-  countDowns: (stream) => stream.map(() => 'COUNT_DOWN')
-});
+App.childContextTypes = {
+  inputs: React.PropTypes.object,
+  state: React.PropTypes.object
+};

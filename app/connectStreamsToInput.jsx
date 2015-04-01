@@ -1,41 +1,48 @@
 import React from 'react'
 import Bacon from 'baconjs'
 
-export default function connectStreamsToInput(Component, streams) {
-  return class extends React.Component {
+export default function connectStreamsToInput(Component, sources, mergeFn) {
+  class WithStreams extends React.Component {
     componentWillMount() {
       this.streamProps = {};
-      this.eventBuses = {};
-
-      Object.keys(streams).forEach((streamName) => {
-        const streamTransform = streams[streamName]
-        this.connectToInput(streamTransform(this.eventStream(streamName)))
-      })
+      this.buses = [];
+      sources.forEach((streamName) => {
+        const bus = new Bacon.Bus();
+        this.buses.push(bus);
+        this.streamProps[streamName] = function sendEventToStream(event) {
+          bus.push(event);
+        };
+      });
+      this.connectToInput(mergeFn.apply(null, this.buses));
     }
 
     componentWillUnmount() {
-      for (let eventName in this.eventBuses) {
-        this.eventBuses[eventName].end();
-      }
+      this.buses.forEach((bus) => bus.end());
     }
 
     connectToInput(stream) {
-      return this.props.inputs.plug(stream);
-    }
+      const state = this.context.state;
 
-    eventStream(eventName) {
-      let bus = this.eventBuses[eventName];
-      if (!bus) {
-        bus = this.eventBuses[eventName] = new Bacon.Bus();
-        this.streamProps[eventName] = function sendEventToStream(event) {
-          bus.push(event);
-        };
+      function processResult(streamResult) {
+        if (streamResult instanceof Bacon.Observable) {
+          return streamResult;
+        } else if (typeof streamResult == 'function') {
+          return processResult(streamResult(state));
+        } else {
+          return Bacon.once(streamResult);
+        }
       }
-      return bus;
+      stream = stream.flatMapLatest(processResult);
+      return (this.props.inputs || this.context.inputs).plug(stream);
     }
 
     render() {
-      return <Component {...this.props} {...this.streamProps} />
+      return <Component {...this.props} {...this.streamProps} />;
     }
   }
+  WithStreams.contextTypes = {
+    inputs: React.PropTypes.object,
+    state: React.PropTypes.object
+  };
+  return WithStreams;
 }
