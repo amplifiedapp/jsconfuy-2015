@@ -13,7 +13,21 @@ export default Immutable.fromJS({
       audio: 'http://localhost:3000/assets/song/song1.mp3',
       playStatus: 'STOPPED',
       playedPercentage: 0,
-      loadedPercentage: 0
+      loadedPercentage: 0,
+      comments: [
+        {
+          cid: 100,
+          user: {
+            avatar_url: 'http://www.gravatar.com/avatar/1eb5eb46d5a4289d3528426b1626c2bb.png'
+          }
+        },
+        {
+          cid: 200,
+          user: {
+            avatar_url: 'http://www.gravatar.com/avatar/1eb5eb46d5a4289d3528426b1626c2bb.png'
+          }
+        }
+      ]
     }
   }
 });

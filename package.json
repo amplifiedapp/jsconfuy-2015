@@ -30,8 +30,10 @@
     "babel-eslint": "babel/babel-eslint"
   },
   "dependencies": {
-    "immutable": "3.6.4",
     "baconjs": "0.7.53",
+    "classnames": "^1.2.0",
+    "immutable": "3.6.4",
+    "moment": "^2.9.0",
     "react": "0.13.1"
   }
 }
