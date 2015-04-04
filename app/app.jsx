@@ -10,7 +10,7 @@ export default class App extends React.Component {
     return {
       inputs: this.props.inputs,
       state: this.props.state
-    }
+    };
   }
 }
 

@@ -34,7 +34,7 @@ export default class NewComment extends React.Component {
   handleFormSubmit(ev) {
     ev.preventDefault();
 
-    if(this.state.comment.comment != "") {
+    if(this.state.comment.comment !== "") {
       this.props.onNewComment(this.state.comment);
     }
 
@@ -58,7 +58,7 @@ export default class NewComment extends React.Component {
       marker = <div className="waveform-new-comment__position-range" onClick={this.handleRangeClick.bind(this)}>
                   <i className="waveform-new-comment__placer" style={{left: this.state.comment.song_moment_percentage + "%"}}></i>
                 </div>;
-      input = <input type="text" placeholder="Add comment..." value={this.state.comment.comment} onChange={this.handleCommentChange.bind(this)} />
+      input = <input type="text" placeholder="Add comment..." value={this.state.comment.comment} onChange={this.handleCommentChange.bind(this)} />;
       link = <noscript />;
 
     } else {

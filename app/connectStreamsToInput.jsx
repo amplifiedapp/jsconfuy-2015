@@ -26,7 +26,7 @@ export default function connectStreamsToInput(Component, sources, mergeFn) {
       function processResult(streamResult) {
         if (streamResult instanceof Bacon.Observable) {
           return streamResult;
-        } else if (typeof streamResult == 'function') {
+        } else if (typeof streamResult === 'function') {
           return processResult(streamResult(state));
         } else {
           return Bacon.once(streamResult);
@@ -45,4 +45,4 @@ export default function connectStreamsToInput(Component, sources, mergeFn) {
     state: React.PropTypes.object
   };
   return WithStreams;
-}
+};

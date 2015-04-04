@@ -37,4 +37,4 @@ export default function update(state, action) {
     default:
       return state;
   }
-}
+};

@@ -21,7 +21,7 @@ export default class SongWaveformComments extends React.Component {
     })(this);
   }
 
-  handleCommentMouseLeave(comment) {
+  handleCommentMouseLeave() {
     return (function(_this) {
       return function() {
         return _this.setState({
@@ -60,7 +60,7 @@ export default class SongWaveformComments extends React.Component {
     comment = this.props.comments.filter(c => c.get("cid") === this.state.currentCommentCid).get(0);
     user = comment.get("user");
     if (user.get("avatar_url")) {
-      userAvatar = <img src={user.get("avatar_url")} />
+      userAvatar = <img src={user.get("avatar_url")} />;
     } else {
       userAvatar = <noscript />;
     }
