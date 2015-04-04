@@ -1,7 +1,10 @@
 import React from 'react'
 import classnames from 'classnames';
+import connectStreamsToInput from './connectStreamsToInput';
+import intents from './intents';
+import Immutable from 'immutable';
 
-export default class NewComment extends React.Component {
+class NewComment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +38,17 @@ export default class NewComment extends React.Component {
     ev.preventDefault();
 
     if(this.state.comment.comment !== "") {
-      this.props.onNewComment(this.state.comment);
+      let comment = {
+        cid: Math.floor(Math.random() * (100000 - 100 + 1)) + 100,
+        user: {
+          avatar_url: 'http://www.gravatar.com/avatar/1eb5eb46d5a4289d3528426b1626c2bb.png',
+          full_name: "Sergio Rafael Gianazza"
+        },
+        song_moment_percentage: this.state.comment.song_moment_percentage,
+        song_moment: '100',
+        comment: this.state.comment.comment
+      }
+      this.props.newComment(comment);
     }
 
     this.setState({
@@ -73,3 +86,9 @@ export default class NewComment extends React.Component {
            </form>;
   }
 }
+
+function mergeStreams(newComment) {
+  return newComment.map(comment => Immutable.fromJS(comment)).map(intents.newComment);
+}
+
+export default connectStreamsToInput(NewComment, ['newComment'], mergeStreams);

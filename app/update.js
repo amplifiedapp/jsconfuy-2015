@@ -34,6 +34,10 @@ export default function update(state, action) {
       return state.updateIn(['currentRehearsedSong', 'song'], (song) => {
         return song.set('playedPercentage', action.payload.percentage);
       });
+    case 'NEW_COMMENT':
+      return state.updateIn(["currentRehearsedSong", "song", "comments"], (comments) => {
+        return comments.push(action.payload.comment);
+      });
     default:
       return state;
   }

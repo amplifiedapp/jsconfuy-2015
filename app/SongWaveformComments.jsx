@@ -78,12 +78,6 @@ export default class SongWaveformComments extends React.Component {
           </div>;
   }
 
-  handleNewComment(commentData) {
-    console.log('NUEVO COMENTARIO!!!');
-    console.log(commentData);
-    return null; //input.addNewRehearsedSongComment(commentData);
-  }
-
   render() {
     let markers = this.props.comments.map(this.renderCommentMarker.bind(this)).toArray();
     let currentComment;

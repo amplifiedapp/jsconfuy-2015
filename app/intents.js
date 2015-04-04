@@ -29,5 +29,13 @@ export default {
 
   seekInSong(percentage) {
     return {type: 'SEEK_IN_SONG', payload: { percentage }};
+  },
+
+  viewComment(commentCid) {
+    return { type: 'VIEW_COMMENT', payload: {commentCid} };
+  },
+
+  newComment(comment) {
+    return {type: 'NEW_COMMENT', payload: { comment }};
   }
 };
