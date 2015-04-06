@@ -34,10 +34,18 @@ export default function update(state, action) {
       return state.updateIn(['currentRehearsedSong', 'song'], (song) => {
         return song.set('playedPercentage', action.payload.percentage);
       });
+    case 'VIEW_COMMENT':
+      return state.setIn(['currentRehearsedSong', 'song', 'currentCommentCid'],
+        action.payload.commentCid
+      );
     case 'NEW_COMMENT':
+      return state.setIn(['currentRehearsedSong', 'song', 'addingComment'],
+        true
+      );
+    case 'CREATE_COMMENT':
       return state.updateIn(["currentRehearsedSong", "song", "comments"], (comments) => {
-        return comments.push(action.payload.comment);
-      });
+        return comments.set(action.payload.comment.get("cid"), action.payload.comment);
+      }).setIn(["currentRehearsedSong", "song", "addingComment"], false);
     default:
       return state;
   }

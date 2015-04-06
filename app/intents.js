@@ -35,7 +35,11 @@ export default {
     return { type: 'VIEW_COMMENT', payload: {commentCid} };
   },
 
-  newComment(comment) {
-    return {type: 'NEW_COMMENT', payload: { comment }};
+  newComment() {
+    return { type: 'NEW_COMMENT' };
+  },
+
+  createComment(comment) {
+    return {type: 'CREATE_COMMENT', payload: { comment }};
   }
 };

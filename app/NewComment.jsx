@@ -8,7 +8,6 @@ class NewComment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      addingComment: false,
       comment: {
         song_moment_percentage: 0,
         comment: ""
@@ -29,11 +28,6 @@ class NewComment extends React.Component {
     this.setState({comment: comment});
   }
 
-  handleAddCommentClick(ev) {
-    ev.preventDefault();
-    this.setState({addingComment: true});
-  }
-
   handleFormSubmit(ev) {
     ev.preventDefault();
 
@@ -48,11 +42,10 @@ class NewComment extends React.Component {
         song_moment: '100',
         comment: this.state.comment.comment
       }
-      this.props.newComment(comment);
+      this.props.createComment(comment);
     }
 
     this.setState({
-      addingComment: false,
       comment: {
         song_moment_percentage: 0,
         comment: ""
@@ -64,10 +57,10 @@ class NewComment extends React.Component {
     let marker, link, input;
     let newCommentClass = classnames({
       'waveform-new-comment': true,
-      'is-adding-comments': this.state.addingComment
+      'is-adding-comments': this.props.addingComment
     });
 
-    if (this.state.addingComment) {
+    if (this.props.addingComment) {
       marker = <div className="waveform-new-comment__position-range" onClick={this.handleRangeClick.bind(this)}>
                   <i className="waveform-new-comment__placer" style={{left: this.state.comment.song_moment_percentage + "%"}}></i>
                 </div>;
@@ -77,7 +70,7 @@ class NewComment extends React.Component {
     } else {
       marker = <noscript/>;
       input = <noscript/>;
-      link = <a href="#" onClick={this.handleAddCommentClick.bind(this)}>New Comment</a>;
+      link = <a href="#" onClick={this.props.newComment}>New Comment</a>;
     }
     return <form className={newCommentClass} onSubmit={this.handleFormSubmit.bind(this)}>
             {marker}
@@ -87,8 +80,9 @@ class NewComment extends React.Component {
   }
 }
 
-function mergeStreams(newComment) {
-  return newComment.map(comment => Immutable.fromJS(comment)).map(intents.newComment);
+function mergeStreams(createComment, newComment) {
+  return createComment.map(comment => Immutable.fromJS(comment)).map(intents.createComment)
+                      .merge(newComment.doAction('.preventDefault').map(intents.newComment));
 }
 
-export default connectStreamsToInput(NewComment, ['newComment'], mergeStreams);
+export default connectStreamsToInput(NewComment, ["createComment", "newComment"], mergeStreams);

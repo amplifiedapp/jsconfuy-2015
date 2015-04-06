@@ -1,35 +1,11 @@
-import React from "react"
-import moment from "moment"
-import classnames from "classnames"
-import NewComment from "./NewComment"
+import React from "react";
+import moment from "moment";
+import classnames from "classnames";
+import NewComment from "./NewComment";
+import intents from "./intents";
+import connectStreamsToInput from "./connectStreamsToInput";
 
-export default class SongWaveformComments extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentCommentCid: null
-    };
-  }
-
-  handleCommentMouseEnter(comment) {
-    return (function(_this) {
-      return function() {
-        return _this.setState({
-          currentCommentCid: comment.get('cid')
-        });
-      };
-    })(this);
-  }
-
-  handleCommentMouseLeave() {
-    return (function(_this) {
-      return function() {
-        return _this.setState({
-          currentCommentCid: null
-        });
-      };
-    })(this);
-  }
+class SongWaveformComments extends React.Component {
 
   renderCommentMarker(comment) {
     let handleClass;
@@ -49,7 +25,7 @@ export default class SongWaveformComments extends React.Component {
 
     return <div className="waveform__marker" style={markerStyle} key={comment.get('cid')}>
               <div className="waveform__marker__positioner"></div>
-              <div className={handleClass} onMouseEnter={this.handleCommentMouseEnter(comment)} onMouseLeave={this.handleCommentMouseLeave(comment)}>
+              <div className={handleClass} onMouseEnter={() => { this.props.commentEnter(comment.get('cid')) }} onMouseLeave={this.props.commentLeave}>
                 <img src={handleImageUrl} />
               </div>
           </div>;
@@ -57,7 +33,7 @@ export default class SongWaveformComments extends React.Component {
 
   renderCurrentComment() {
     let comment, user, userAvatar;
-    comment = this.props.comments.filter(c => c.get("cid") === this.state.currentCommentCid).get(0);
+    comment = this.props.comments.get(this.props.currentCommentCid);
     user = comment.get("user");
     if (user.get("avatar_url")) {
       userAvatar = <img src={user.get("avatar_url")} />;
@@ -82,7 +58,7 @@ export default class SongWaveformComments extends React.Component {
     let markers = this.props.comments.map(this.renderCommentMarker.bind(this)).toArray();
     let currentComment;
 
-    if(this.state.currentCommentCid !== null) {
+    if(this.props.currentCommentCid !== null) {
       currentComment = this.renderCurrentComment();
     } else {
       currentComment = <noscript />;
@@ -93,7 +69,13 @@ export default class SongWaveformComments extends React.Component {
               <div>{markers}</div>
             </div>
             {currentComment}
-            <NewComment onNewComment={this.handleNewComment} />
+            <NewComment addingComment={this.props.addingComment}/>
           </div>;
   }
 }
+
+function merge(commentEnter, commentLeave) {
+  return commentEnter.merge(commentLeave.map(null)).map(intents.viewComment);
+}
+
+export default connectStreamsToInput(SongWaveformComments, ["commentEnter", "commentLeave"], merge);

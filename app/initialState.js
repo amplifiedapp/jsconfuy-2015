@@ -14,28 +14,31 @@ export default Immutable.fromJS({
       playStatus: 'STOPPED',
       playedPercentage: 0,
       loadedPercentage: 0,
-      comments: [
-        {
-          cid: 100,
-          user: {
-            avatar_url: 'http://www.gravatar.com/avatar/1eb5eb46d5a4289d3528426b1626c2bb.png',
-            full_name: "Sergio Rafael Gianazza"
-          },
-          song_moment_percentage: '10',
-          song_moment: '54',
-          comment: "Muy bueno!"
-        },
-        {
-          cid: 200,
-          user: {
-            avatar_url: 'https://s.gravatar.com/avatar/2d4686084d18b4991674f0cd4fbc6c58?s=80',
-            full_name: "Leonardo Garcia Crespo"
-          },
-          song_moment_percentage: '35',
-          song_moment: '80',
-          comment: "Excelente!"
-        }
-      ]
+      currentCommentCid: null,
+      addingComment: false,
+      comments: Immutable.OrderedMap([
+        [100, Immutable.fromJS({
+              cid: 100,
+              user: {
+                avatar_url: 'http://www.gravatar.com/avatar/1eb5eb46d5a4289d3528426b1626c2bb.png',
+                full_name: "Sergio Rafael Gianazza"
+              },
+              song_moment_percentage: '10',
+              song_moment: '54',
+              comment: "Muy bueno!"
+            })
+        ],
+        [200, Immutable.fromJS({
+              cid: 200,
+              user: {
+                avatar_url: 'https://s.gravatar.com/avatar/2d4686084d18b4991674f0cd4fbc6c58?s=80',
+                full_name: "Leonardo Garcia Crespo"
+              },
+              song_moment_percentage: '35',
+              song_moment: '80',
+              comment: "Excelente!"
+            })
+        ]])
     }
   }
 });
