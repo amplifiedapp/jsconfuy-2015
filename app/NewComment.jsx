@@ -23,13 +23,7 @@ class NewComment extends React.Component {
 
     if(commentText !== "") {
       let comment = {
-        cid: Math.floor(Math.random() * (100000 - 100 + 1)) + 100,
-        user: {
-          avatar_url: 'http://www.gravatar.com/avatar/1eb5eb46d5a4289d3528426b1626c2bb.png',
-          full_name: "Sergio Rafael Gianazza"
-        },
         song_moment_percentage: this.state.song_moment_percentage,
-        song_moment: '100',
         comment: commentText
       }
       this.props.createComment(comment);
@@ -68,7 +62,7 @@ class NewComment extends React.Component {
 }
 
 function mergeStreams(createComment, newComment, hideNewComment) {
-  return createComment.map(comment => Immutable.fromJS(comment)).map(intents.createComment)
+  return createComment.map(intents.createComment)
                       .merge(newComment.doAction('.preventDefault').map(intents.newComment))
                       .merge(hideNewComment.map(intents.hideNewComment));
 }

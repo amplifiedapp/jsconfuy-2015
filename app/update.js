@@ -1,3 +1,6 @@
+import Immutable from "immutable";
+import assign from "object-assign";
+
 export default function update(state, action) {
   console.log(action);
   switch (action.type) {
@@ -47,9 +50,18 @@ export default function update(state, action) {
         false
       );
     case 'CREATE_COMMENT':
+      return state.setIn(["currentRehearsedSong", "song", "addingComment"],
+        false
+      );
+    case 'CREATE_COMMENT_SUCCESS':
+      const lastCid = state.getIn(['currentRehearsedSong', 'song', 'comments'])
+        .keySeq().max();
+      const newCid = lastCid + 1;
       return state.updateIn(["currentRehearsedSong", "song", "comments"], (comments) => {
-        return comments.set(action.payload.comment.get("cid"), action.payload.comment);
-      }).setIn(["currentRehearsedSong", "song", "addingComment"], false);
+        const comment = assign({}, action.payload.comment, {cid: newCid});
+
+        return comments.set(newCid, Immutable.fromJS(comment));
+      });
     default:
       return state;
   }

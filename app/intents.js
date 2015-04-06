@@ -1,3 +1,6 @@
+import Bacon from 'baconjs';
+import api from './api';
+
 export default {
   playSong() {
     return {type: 'PLAY_SONG'};
@@ -43,7 +46,16 @@ export default {
     return { type: 'HIDE_NEW_COMMENT' };
   },
 
-  createComment(comment) {
-    return {type: 'CREATE_COMMENT', payload: { comment }};
+  createComment(commentData) {
+    return Bacon.once({type: 'CREATE_COMMENT', payload: { commentData }})
+      .merge(Bacon.fromPromise(api.createComment(commentData))
+        .map(response => {
+          return {type: 'CREATE_COMMENT_SUCCESS', payload: {comment: response}};
+        })
+        .mapError(response => {
+          return {type: 'CREATE_COMMENT_FAILURE', payload: {failure: response}};
+        })
+      );
+
   }
 };
