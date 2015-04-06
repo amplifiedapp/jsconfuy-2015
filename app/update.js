@@ -42,6 +42,10 @@ export default function update(state, action) {
       return state.setIn(['currentRehearsedSong', 'song', 'addingComment'],
         true
       );
+    case 'HIDE_NEW_COMMENT':
+      return state.setIn(["currentRehearsedSong", "song", "addingComment"],
+        false
+      );
     case 'CREATE_COMMENT':
       return state.updateIn(["currentRehearsedSong", "song", "comments"], (comments) => {
         return comments.set(action.payload.comment.get("cid"), action.payload.comment);

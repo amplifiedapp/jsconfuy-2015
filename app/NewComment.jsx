@@ -33,14 +33,11 @@ class NewComment extends React.Component {
         comment: commentText
       }
       this.props.createComment(comment);
+    } else {
+      this.props.hideNewComment();
     }
 
-    this.setState({
-      comment: {
-        song_moment_percentage: 0,
-        comment: ""
-      }
-    });
+    this.setState({ song_moment_percentage: 0 });
   }
 
   render() {
@@ -70,9 +67,10 @@ class NewComment extends React.Component {
   }
 }
 
-function mergeStreams(createComment, newComment) {
+function mergeStreams(createComment, newComment, hideNewComment) {
   return createComment.map(comment => Immutable.fromJS(comment)).map(intents.createComment)
-                      .merge(newComment.doAction('.preventDefault').map(intents.newComment));
+                      .merge(newComment.doAction('.preventDefault').map(intents.newComment))
+                      .merge(hideNewComment.map(intents.hideNewComment));
 }
 
-export default connectStreamsToInput(NewComment, ["createComment", "newComment"], mergeStreams);
+export default connectStreamsToInput(NewComment, ["createComment", "newComment", "hideNewComment"], mergeStreams);

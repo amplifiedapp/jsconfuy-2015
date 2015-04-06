@@ -39,6 +39,10 @@ export default {
     return { type: 'NEW_COMMENT' };
   },
 
+  hideNewComment() {
+    return { type: 'HIDE_NEW_COMMENT' };
+  },
+
   createComment(comment) {
     return {type: 'CREATE_COMMENT', payload: { comment }};
   }
