@@ -1,46 +1,36 @@
-import React from 'react'
-import classnames from 'classnames';
-import connectStreamsToInput from './connectStreamsToInput';
-import intents from './intents';
-import Immutable from 'immutable';
+import React from "react";
+import classnames from "classnames";
+import connectStreamsToInput from "./connectStreamsToInput";
+import intents from "./intents";
+import Immutable from "immutable";
 
 class NewComment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      comment: {
-        song_moment_percentage: 0,
-        comment: ""
-      }
+      song_moment_percentage: 0
     };
   }
 
-  handleCommentChange(ev) {
-    let comment = this.state.comment;
-    comment.comment = ev.target.value;
-    this.setState({comment: comment});
-  }
-
   handleRangeClick(ev) {
-    let percentage = (ev.nativeEvent.offsetX / ev.target.offsetWidth * 100);
-    let comment = this.state.comment;
-    comment.song_moment_percentage = percentage;
-    this.setState({comment: comment});
+    const percentage = (ev.nativeEvent.offsetX / ev.target.offsetWidth * 100);
+    this.setState({song_moment_percentage: percentage});
   }
 
   handleFormSubmit(ev) {
     ev.preventDefault();
+    const commentText = this.refs.commentText.getDOMNode().value;
 
-    if(this.state.comment.comment !== "") {
+    if(commentText !== "") {
       let comment = {
         cid: Math.floor(Math.random() * (100000 - 100 + 1)) + 100,
         user: {
           avatar_url: 'http://www.gravatar.com/avatar/1eb5eb46d5a4289d3528426b1626c2bb.png',
           full_name: "Sergio Rafael Gianazza"
         },
-        song_moment_percentage: this.state.comment.song_moment_percentage,
+        song_moment_percentage: this.state.song_moment_percentage,
         song_moment: '100',
-        comment: this.state.comment.comment
+        comment: commentText
       }
       this.props.createComment(comment);
     }
@@ -62,9 +52,9 @@ class NewComment extends React.Component {
 
     if (this.props.addingComment) {
       marker = <div className="waveform-new-comment__position-range" onClick={this.handleRangeClick.bind(this)}>
-                  <i className="waveform-new-comment__placer" style={{left: this.state.comment.song_moment_percentage + "%"}}></i>
+                  <i className="waveform-new-comment__placer" style={{left: this.state.song_moment_percentage + "%"}}></i>
                 </div>;
-      input = <input type="text" placeholder="Add comment..." value={this.state.comment.comment} onChange={this.handleCommentChange.bind(this)} />;
+      input = <input type="text" placeholder="Add comment..." ref="commentText" />;
       link = <noscript />;
 
     } else {
