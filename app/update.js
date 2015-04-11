@@ -54,12 +54,13 @@ export default function update(state, action) {
         false
       );
     case 'CREATE_COMMENT_SUCCESS':
-      const lastCid = state.getIn(['currentRehearsedSong', 'song', 'comments'])
+      const song = state.getIn(['currentRehearsedSong', 'song']);
+      const lastCid = song.getIn(['comments'])
         .keySeq().max();
       const newCid = lastCid + 1;
       return state.updateIn(["currentRehearsedSong", "song", "comments"], (comments) => {
         const comment = assign({}, action.payload.comment, {cid: newCid});
-
+        comment.songMoment = comment.songMomentPercentage * song.get('durationInSecs') / 100;
         return comments.set(newCid, Immutable.fromJS(comment));
       });
     default:

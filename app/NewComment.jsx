@@ -8,13 +8,13 @@ class NewComment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      song_moment_percentage: 0
+      songMomentPercentage: 0
     };
   }
 
   handleRangeClick(ev) {
     const percentage = (ev.nativeEvent.offsetX / ev.target.offsetWidth * 100);
-    this.setState({song_moment_percentage: percentage});
+    this.setState({songMomentPercentage: percentage});
   }
 
   handleFormSubmit(ev) {
@@ -23,7 +23,7 @@ class NewComment extends React.Component {
 
     if(commentText !== "") {
       let comment = {
-        song_moment_percentage: this.state.song_moment_percentage,
+        songMomentPercentage: this.state.songMomentPercentage,
         comment: commentText
       }
       this.props.createComment(comment);
@@ -31,7 +31,7 @@ class NewComment extends React.Component {
       this.props.hideNewComment();
     }
 
-    this.setState({ song_moment_percentage: 0 });
+    this.setState({ songMomentPercentage: 0 });
   }
 
   render() {
@@ -43,7 +43,7 @@ class NewComment extends React.Component {
 
     if (this.props.addingComment) {
       marker = <div className="waveform-new-comment__position-range" onClick={this.handleRangeClick.bind(this)}>
-                  <i className="waveform-new-comment__placer" style={{left: this.state.song_moment_percentage + "%"}}></i>
+                  <i className="waveform-new-comment__placer" style={{left: this.state.songMomentPercentage + "%"}}></i>
                 </div>;
       input = <input type="text" placeholder="Add comment..." ref="commentText" />;
       link = <noscript />;

@@ -7,10 +7,10 @@ import connectStreamsToInput from "./connectStreamsToInput";
 class SongWaveformComments extends React.Component {
 
   renderCommentMarker(comment) {
-    const imageUrl = comment.get('user').get('avatar_url');
+    const imageUrl = comment.get('user').get('avatarUrl');
     const isCurrentComment = this.props.currentCommentCid === comment.get('cid');
 
-    return <Marker position={comment.get('song_moment_percentage')}
+    return <Marker position={comment.get('songMomentPercentage')}
       onShow={() => { this.props.commentEnter(comment.get('cid')) }}
       onHide={this.props.commentLeave}
       handleImageUrl={imageUrl}
@@ -23,7 +23,7 @@ class SongWaveformComments extends React.Component {
     const comment = this.props.comments.get(this.props.currentCommentCid);
     const user = comment.get("user");
 
-    const percentage = comment.get('song_moment_percentage');
+    const percentage = comment.get('songMomentPercentage');
     const commentStyles = percentage < 50 ?
       {
         left: percentage + '%',
@@ -35,10 +35,10 @@ class SongWaveformComments extends React.Component {
       };
 
     return <div className="waveform-comment__box" style={commentStyles}>
-      <span className="commentUsername">{user.get("full_name")}</span>
+      <span className="commentUsername">{user.get("fullName")}</span>
       {' '}
       <span className="commentSongDuration">
-          ({moment.utc(comment.get("song_moment") * 1000).format("H:mm:ss").replace(/^0:/, "")})
+          ({moment.utc(comment.get("songMoment") * 1000).format("H:m:ss").replace(/^0:/, "")})
       </span>
       {' '}
       <span className="commentText">
