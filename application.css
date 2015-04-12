@@ -13523,16 +13523,13 @@ Editing state:
 .waveform-new-comment {
   position: relative;
   width: 100%;
+}
+
+.waveform-container .waveform-context-visible {
   visibility: hidden;
 }
 
-/* line 58, /Users/lenny/dev/amplified/amplifiedapp/app/assets/stylesheets/app/rehearsed_songs.scss */
-.waveform-container:hover .waveform-new-comment {
-  visibility: visible;
-}
-
-/* line 62, /Users/lenny/dev/amplified/amplifiedapp/app/assets/stylesheets/app/rehearsed_songs.scss */
-.is-adding-comments {
+.waveform-container:hover .waveform-context-visible {
   visibility: visible;
 }
 

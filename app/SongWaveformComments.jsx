@@ -50,12 +50,17 @@ class SongWaveformComments extends React.Component {
   render() {
     const markers = this.props.comments.map(c => this.renderCommentMarker(c)).toArray();
 
+    const newComment = this.props.addingComment ?
+      <NewComment onRequestHide={this.props.hideCommentForm}
+                  onNewComment={this.props.createComment} /> :
+      <a href="#" className="waveform-context-visible" onClick={this.props.newComment}>Add Comment</a>;
+
     return <div>
             <div className="waveform__layer">
               {markers}
             </div>
             {this.renderCommentBox()}
-            <NewComment addingComment={this.props.addingComment}/>
+            {newComment}
           </div>;
   }
 }
@@ -82,8 +87,13 @@ class Marker extends React.Component {
   }
 }
 
-function merge(commentEnter, commentLeave) {
-  return commentEnter.merge(commentLeave.map(null)).map(intents.viewComment);
+function merge(commentEnter, commentLeave, newComment, createComment, hideCommentForm) {
+  return commentEnter.merge(commentLeave.map(null)).map(intents.viewComment)
+    .merge(newComment.doAction('.preventDefault').map(intents.newComment))
+    .merge(createComment.map(intents.createComment))
+    .merge(hideCommentForm.map(intents.hideNewComment));
 }
 
-export default connectStreamsToInput(SongWaveformComments, ["commentEnter", "commentLeave"], merge);
+export default connectStreamsToInput(SongWaveformComments,
+  ["commentEnter", "commentLeave", "newComment", "createComment", "hideCommentForm"],
+  merge);
