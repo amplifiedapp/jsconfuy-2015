@@ -13483,11 +13483,6 @@ Editing state:
 .waveform__marker__handle {
   position: absolute;
   bottom: 0;
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  border-radius: 12px;
-  background: #eb6759;
   cursor: pointer;
 }
 
@@ -13502,29 +13497,39 @@ Editing state:
 
 /* line 43, /Users/lenny/dev/amplified/amplifiedapp/app/assets/stylesheets/app/rehearsed_songs.scss */
 .waveform-comment__box {
+  position: absolute;
   background: white;
-  width: 100%;
   border: 1px solid #efefef;
-  padding: 5px;
-  left: 0;
-  top: 12px;
+  padding: 3px;
+  bottom: -3px;
   z-index: 100;
+}
+
+.commentUsername {
+  font-size: .8rem;
+  font-weight: bold;
+}
+
+.commentSongDuration {
+  font-size: .8rem;
+  font-style: italic;
+}
+
+.commentText {
+  font-size: .8rem;
 }
 
 /* line 53, /Users/lenny/dev/amplified/amplifiedapp/app/assets/stylesheets/app/rehearsed_songs.scss */
 .waveform-new-comment {
   position: relative;
   width: 100%;
+}
+
+.waveform-container .waveform-context-visible {
   visibility: hidden;
 }
 
-/* line 58, /Users/lenny/dev/amplified/amplifiedapp/app/assets/stylesheets/app/rehearsed_songs.scss */
-.waveform-container:hover .waveform-new-comment {
-  visibility: visible;
-}
-
-/* line 62, /Users/lenny/dev/amplified/amplifiedapp/app/assets/stylesheets/app/rehearsed_songs.scss */
-.is-adding-comments {
+.waveform-container:hover .waveform-context-visible {
   visibility: visible;
 }
 

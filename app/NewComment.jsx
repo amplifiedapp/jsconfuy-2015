@@ -1,70 +1,51 @@
 import React from "react";
-import classnames from "classnames";
-import connectStreamsToInput from "./connectStreamsToInput";
-import intents from "./intents";
-import Immutable from "immutable";
 
-class NewComment extends React.Component {
+export default class NewComment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      song_moment_percentage: 0
+      comment: '',
+      songMomentPercentage: 0
     };
+  }
+
+  componentDidMount() {
+    this.refs.commentInput.getDOMNode().focus();
   }
 
   handleRangeClick(ev) {
     const percentage = (ev.nativeEvent.offsetX / ev.target.offsetWidth * 100);
-    this.setState({song_moment_percentage: percentage});
+    this.setState({songMomentPercentage: percentage});
+    this.refs.commentInput.getDOMNode().focus();
   }
 
   handleFormSubmit(ev) {
     ev.preventDefault();
-    const commentText = this.refs.commentText.getDOMNode().value;
+    const commentText = this.state.comment;
 
-    if(commentText !== "") {
+    if (commentText !== "") {
       let comment = {
-        song_moment_percentage: this.state.song_moment_percentage,
+        songMomentPercentage: this.state.songMomentPercentage,
         comment: commentText
       }
-      this.props.createComment(comment);
+      this.props.onNewComment(comment);
     } else {
-      this.props.hideNewComment();
+      this.props.onRequestHide();
     }
 
-    this.setState({ song_moment_percentage: 0 });
+    this.setState({ songMomentPercentage: 0 });
+  }
+
+  handleCommentTextChange(ev) {
+    this.setState({comment: ev.target.value});
   }
 
   render() {
-    let marker, link, input;
-    let newCommentClass = classnames({
-      'waveform-new-comment': true,
-      'is-adding-comments': this.props.addingComment
-    });
-
-    if (this.props.addingComment) {
-      marker = <div className="waveform-new-comment__position-range" onClick={this.handleRangeClick.bind(this)}>
-                  <i className="waveform-new-comment__placer" style={{left: this.state.song_moment_percentage + "%"}}></i>
-                </div>;
-      input = <input type="text" placeholder="Add comment..." ref="commentText" />;
-      link = <noscript />;
-
-    } else {
-      marker = <noscript/>;
-      input = <noscript/>;
-      link = <a href="#" onClick={this.props.newComment}>New Comment</a>;
-    }
-    return <form className={newCommentClass} onSubmit={this.handleFormSubmit.bind(this)}>
-            {marker}
-            {link}
-            {input}
+    return <form className="waveform-new-comment" onSubmit={this.handleFormSubmit.bind(this)}>
+            <div className="waveform-new-comment__position-range" onClick={this.handleRangeClick.bind(this)}>
+              <i className="waveform-new-comment__placer" style={{left: this.state.songMomentPercentage + "%"}}></i>
+            </div>
+            <input type="text" placeholder="Add comment..." ref="commentInput" onChange={this.handleCommentTextChange.bind(this)} />
            </form>;
   }
 }
-
-function mergeStreams(createComment, newComment, hideNewComment) {
-  return createComment.map(intents.createComment)
-                      .merge(newComment.doAction('.preventDefault').map(intents.newComment))
-                      .merge(hideNewComment.map(intents.hideNewComment));
-}
-
-export default connectStreamsToInput(NewComment, ["createComment", "newComment", "hideNewComment"], mergeStreams);
