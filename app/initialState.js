@@ -2,8 +2,8 @@ import Immutable from 'immutable'
 
 export default Immutable.fromJS({
   currentRehearsedSong: {
-    name: 'Test 10',
-    description: 'Song Description',
+    name: 'Tu Eres Mi Destino',
+    description: 'Ensayo de Yira',
     rehearsedIn: 'Abbey Road',
     rehearsedAt: '2015-03-20',
     duration: '03:23',
