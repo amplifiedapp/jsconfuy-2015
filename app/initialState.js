@@ -13,31 +13,33 @@ export default Immutable.fromJS({
     playStatus: 'STOPPED',
     playedPercentage: 0,
     loadedPercentage: 0,
-    currentCommentCid: null,
-    addingComment: false,
-    comments: Immutable.OrderedMap([
-      [100, Immutable.fromJS({
-            cid: 100,
-            user: {
-              avatarUrl: 'http://www.gravatar.com/avatar/1eb5eb46d5a4289d3528426b1626c2bb.png',
-              fullName: "Sergio Rafael Gianazza"
-            },
-            songMomentPercentage: 10,
-            songMoment: 10 * (3 * 60 + 23) / 100,
-            comment: "Muy bueno!"
-          })
-      ],
-      [200, Immutable.fromJS({
-            cid: 200,
-            user: {
-              avatarUrl: 'https://s.gravatar.com/avatar/2d4686084d18b4991674f0cd4fbc6c58?s=80',
-              fullName: "Leonardo Garcia Crespo"
-            },
-            songMomentPercentage: 35,
-            songMoment: 35 * (3 * 60 + 23) / 100,
-            comment: "Excelente!"
-          })
-      ]
-    ])
+    comments: {
+      currentCommentCid: null,
+      addingComment: false,
+      list: Immutable.OrderedMap([
+        [100, Immutable.fromJS({
+              cid: 100,
+              user: {
+                avatarUrl: 'http://www.gravatar.com/avatar/1eb5eb46d5a4289d3528426b1626c2bb.png',
+                fullName: "Sergio Rafael Gianazza"
+              },
+              songMomentPercentage: 10,
+              songMoment: 10 * (3 * 60 + 23) / 100,
+              comment: "Muy bueno!"
+            })
+        ],
+        [200, Immutable.fromJS({
+              cid: 200,
+              user: {
+                avatarUrl: 'https://s.gravatar.com/avatar/2d4686084d18b4991674f0cd4fbc6c58?s=80',
+                fullName: "Leonardo Garcia Crespo"
+              },
+              songMomentPercentage: 35,
+              songMoment: 35 * (3 * 60 + 23) / 100,
+              comment: "Excelente!"
+            })
+        ]
+      ])
+    }
   }
 });

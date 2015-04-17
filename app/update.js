@@ -38,27 +38,27 @@ export default function update(state, action) {
         return song.set('playedPercentage', action.payload.percentage);
       });
     case 'VIEW_COMMENT':
-      return state.setIn(['currentRehearsedSong', 'currentCommentCid'],
+      return state.setIn(['currentRehearsedSong', 'comments', 'currentCommentCid'],
         action.payload.commentCid
       );
     case 'NEW_COMMENT':
-      return state.setIn(['currentRehearsedSong', 'addingComment'],
+      return state.setIn(['currentRehearsedSong', 'comments', 'addingComment'],
         true
       );
     case 'HIDE_NEW_COMMENT':
-      return state.setIn(["currentRehearsedSong", "addingComment"],
+      return state.setIn(["currentRehearsedSong", "comments", "addingComment"],
         false
       );
     case 'CREATE_COMMENT':
-      return state.setIn(["currentRehearsedSong", "addingComment"],
+      return state.setIn(["currentRehearsedSong", "comments", "addingComment"],
         false
       );
     case 'CREATE_COMMENT_SUCCESS':
       const song = state.getIn(['currentRehearsedSong']);
-      const lastCid = song.getIn(['comments'])
+      const lastCid = song.getIn(['comments', 'list'])
         .keySeq().max();
       const newCid = lastCid + 1;
-      return state.updateIn(["currentRehearsedSong", "comments"], (comments) => {
+      return state.updateIn(["currentRehearsedSong", "comments", "list"], (comments) => {
         const comment = assign({}, action.payload.comment, {cid: newCid});
         comment.songMoment = comment.songMomentPercentage * song.get('durationInSecs') / 100;
         return comments.set(newCid, Immutable.fromJS(comment));

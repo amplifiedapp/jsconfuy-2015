@@ -25,10 +25,7 @@ class SongPlayer extends React.Component {
           playedPercentage={song.get('playedPercentage')}
           loadedPercentage={song.get('loadedPercentage')}
           onSongSeek={this.props.seeks} />
-        <SongWaveformComments
-          currentCommentCid={song.get('currentCommentCid')}
-          comments={song.get('comments')}
-          addingComment={song.get("addingComment")} />
+        <SongWaveformComments comments={song.get('comments')} />
       </div>
     </div>;
   }
