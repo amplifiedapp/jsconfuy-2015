@@ -44,7 +44,11 @@ class SongPlayer extends React.Component {
       playerControls.push(<a key="stop" href='#' onClick={this.props.stops}>Stop</a>);
     }
 
-    return playerControls;
+    return playerControls.reduce((list, control) => {
+      list.push(control);
+      list.push(' ');
+      return list;
+    }, []);
   }
 }
 
