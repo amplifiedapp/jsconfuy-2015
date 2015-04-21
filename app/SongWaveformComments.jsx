@@ -8,9 +8,11 @@ class SongWaveformComments extends React.Component {
 
   renderCommentMarker(comment) {
     const imageUrl = comment.get('user').get('avatarUrl');
-    const isCurrentComment = this.props.currentCommentCid === comment.get('cid');
+    const isCurrentComment = this.props.comments.get('currentCommentCid') === comment.get('cid');
 
-    return <Marker position={comment.get('songMomentPercentage')}
+    return <Marker
+      key={comment.get('cid')}
+      position={comment.get('songMomentPercentage')}
       onShow={() => { this.props.commentEnter(comment.get('cid')) }}
       onHide={this.props.commentLeave}
       handleImageUrl={imageUrl}
@@ -18,9 +20,9 @@ class SongWaveformComments extends React.Component {
   }
 
   renderCommentBox() {
-    if (!this.props.currentCommentCid) return null;
+    if (!this.props.comments.get('currentCommentCid')) return null;
 
-    const comment = this.props.comments.get(this.props.currentCommentCid);
+    const comment = this.props.comments.getIn(['list', this.props.comments.get('currentCommentCid')]);
     const user = comment.get("user");
 
     const percentage = comment.get('songMomentPercentage');
@@ -48,9 +50,9 @@ class SongWaveformComments extends React.Component {
   }
 
   render() {
-    const markers = this.props.comments.map(c => this.renderCommentMarker(c)).toArray();
+    const markers = this.props.comments.get('list').map(c => this.renderCommentMarker(c)).toArray();
 
-    const newComment = this.props.addingComment ?
+    const newComment = this.props.comments.get('addingComment') ?
       <NewComment onRequestHide={this.props.hideCommentForm}
                   onNewComment={this.props.createComment} /> :
       <a href="#" className="waveform-context-visible" onClick={this.props.newComment}>Add Comment</a>;

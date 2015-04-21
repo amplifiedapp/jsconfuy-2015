@@ -25,10 +25,7 @@ class SongPlayer extends React.Component {
           playedPercentage={song.get('playedPercentage')}
           loadedPercentage={song.get('loadedPercentage')}
           onSongSeek={this.props.seeks} />
-        <SongWaveformComments
-          currentCommentCid={song.get('currentCommentCid')}
-          comments={song.get('comments')}
-          addingComment={song.get("addingComment")} />
+        <SongWaveformComments comments={song.get('comments')} />
       </div>
     </div>;
   }
@@ -47,7 +44,11 @@ class SongPlayer extends React.Component {
       playerControls.push(<a key="stop" href='#' onClick={this.props.stops}>Stop</a>);
     }
 
-    return playerControls;
+    return playerControls.reduce((list, control) => {
+      list.push(control);
+      list.push(' ');
+      return list;
+    }, []);
   }
 }
 
