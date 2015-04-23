@@ -7,7 +7,7 @@ import connectStreamsToInput from "./connectStreamsToInput";
 class SongWaveformComments extends React.Component {
 
   renderCommentMarker(comment) {
-    const imageUrl = comment.get('user').get('avatarUrl');
+    const imageUrl = comment.getIn(['user', 'avatarUrl']);
     const isCurrentComment = this.props.comments.get('currentCommentCid') === comment.get('cid');
 
     return <Marker

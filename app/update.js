@@ -50,20 +50,41 @@ export default function update(state, action) {
         false
       );
     case "CREATE_COMMENT":
-      return state.setIn(["currentRehearsedSong", "comments", "addingComment"],
-        false
-      );
+      return createComment(action.payload, state);
     case "CREATE_COMMENT_SUCCESS":
-      const song = state.getIn(["currentRehearsedSong"]);
-      const lastCid = song.getIn(["comments", "list"])
-        .keySeq().max();
-      const newCid = lastCid + 1;
-      return state.updateIn(["currentRehearsedSong", "comments", "list"], (comments) => {
-        const comment = assign({}, action.payload.comment, {cid: newCid});
-        comment.songMoment = comment.songMomentPercentage * song.get("durationInSecs") / 100;
-        return comments.set(newCid, Immutable.fromJS(comment));
-      });
+      return createCommentSuccess(action.payload, state);
+    case "CREATE_COMMENT_FAILURE":
+      return createCommentFailure(action.payload, state);
     default:
       return state;
   }
 };
+
+function createComment(payload, state) {
+  const song = state.getIn(["currentRehearsedSong"]);
+  const newCid = state.get('nextCid');
+  return state
+    .setIn(["currentRehearsedSong", "comments", "addingComment"], false)
+    .update('nextCid', (cid) => cid + 1)
+    .updateIn(["currentRehearsedSong", "comments", "list"], (comments) => {
+      const comment = assign({}, payload.commentData, {cid: newCid});
+      comment.songMoment = comment.songMomentPercentage * song.get("durationInSecs") / 100;
+      return comments.set(newCid, Immutable.fromJS(comment));
+    });
+}
+
+function createCommentSuccess(payload, state) {
+  const song = state.getIn(["currentRehearsedSong"]);
+  const cid = payload.cid;
+  return state
+    .updateIn(["currentRehearsedSong", "comments", "list", cid], (comment) => {
+      const comment = assign({}, payload.commentData, {cid});
+      comment.songMoment = comment.songMomentPercentage * song.get("durationInSecs") / 100;
+      return Immutable.fromJS(comment);
+    });
+}
+
+function createCommentFailure(payload, state) {
+  const cid = payload.cid;
+  return state.removeIn(["currentRehearsedSong", "comments", "list", cid]);
+}

@@ -47,15 +47,18 @@ export default {
   },
 
   createComment(commentData) {
-    return Bacon.once({type: 'CREATE_COMMENT', payload: { commentData }})
-      .merge(Bacon.fromPromise(api.createComment(commentData))
-        .map(response => {
-          return {type: 'CREATE_COMMENT_SUCCESS', payload: {comment: response}};
-        })
-        .mapError(response => {
-          return {type: 'CREATE_COMMENT_FAILURE', payload: {failure: response}};
-        })
-      );
+    return (state) => {
+      const commentCid = state.get('nextCid');
+      return Bacon.once({type: 'CREATE_COMMENT', payload: { commentData }})
+        .merge(Bacon.fromPromise(api.createComment(commentData))
+          .map(response => {
+            return {type: 'CREATE_COMMENT_SUCCESS', payload: {commentData: response, cid: commentCid}};
+          })
+          .mapError(response => {
+            return {type: 'CREATE_COMMENT_FAILURE', payload: {failure: response, cid: comentCid}};
+          })
+        );
+    };
 
   }
 };
