@@ -21,17 +21,16 @@ export default function connectStreamsToInput(Component, sources, mergeFn) {
     }
 
     connectToInput(stream) {
-      const state = this.context.state;
-
-      function processResult(streamResult) {
+      const processResult = (streamResult) => {
         if (streamResult instanceof Bacon.Observable) {
           return streamResult;
         } else if (typeof streamResult === 'function') {
-          return processResult(streamResult(state));
+          return processResult(streamResult(this.context.state));
         } else {
           return Bacon.once(streamResult);
         }
-      }
+      };
+
       stream = stream.flatMapLatest(processResult);
       return (this.props.inputs || this.context.inputs).plug(stream);
     }

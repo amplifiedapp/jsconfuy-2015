@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 
 export default Immutable.fromJS({
+  nextCid: 3,
   currentRehearsedSong: {
     name: 'Tu Eres Mi Destino',
     description: 'Ensayo de Yira',
@@ -17,8 +18,8 @@ export default Immutable.fromJS({
       currentCommentCid: null,
       addingComment: false,
       list: Immutable.OrderedMap([
-        [100, Immutable.fromJS({
-              cid: 100,
+        [1, Immutable.fromJS({
+              cid: 1,
               user: {
                 avatarUrl: 'http://www.gravatar.com/avatar/1eb5eb46d5a4289d3528426b1626c2bb.png',
                 fullName: "Sergio Rafael Gianazza"
@@ -28,8 +29,8 @@ export default Immutable.fromJS({
               comment: "Muy bueno!"
             })
         ],
-        [200, Immutable.fromJS({
-              cid: 200,
+        [2, Immutable.fromJS({
+              cid: 2,
               user: {
                 avatarUrl: 'https://s.gravatar.com/avatar/2d4686084d18b4991674f0cd4fbc6c58?s=80',
                 fullName: "Leonardo Garcia Crespo"
